@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register User</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding-top: 50px;
+    }
+    .form-container {
+      max-width: 450px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h3 class="text-center mb-4">User Registration</h3>
+  <form id="registerForm">
+    <div class="mb-3">
+      <label for="mobile" class="form-label">Mobile Number</label>
+      <input type="text" class="form-control" id="mobile" placeholder="Enter 10-digit number" required>
+    </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" id="username" placeholder="Enter username" required>
+    </div>
+    <div class="mb-3">
+      <label for="balance" class="form-label">Opening Balance (₹)</label>
+      <input type="number" class="form-control" id="balance" placeholder="Enter opening balance" required>
+    </div>
+    <button type="submit" class="btn btn-success w-100">Register</button>
+  </form>
+</div>
+
+<!-- Toast -->
+<div class="toast-container">
+  <div id="registerToast" class="toast align-items-center text-white bg-success border-0" role="alert">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMessage">Registered Successfully!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+  document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const mobile = document.getElementById("mobile").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const balance = parseFloat(document.getElementById("balance").value);
+
+    const toastEl = document.getElementById("registerToast");
+    const toastMsg = document.getElementById("toastMessage");
+    const toast = new bootstrap.Toast(toastEl);
+
+    if (!/^\d{10}$/.test(mobile)) {
+      toastMsg.textContent = "Invalid mobile number!";
+      toastEl.classList.replace("bg-success", "bg-danger");
+      toast.show();
+      return;
+    }
+
+    if (!username) {
+      toastMsg.textContent = "Username is required!";
+      toastEl.classList.replace("bg-success", "bg-danger");
+      toast.show();
+      return;
+    }
+
+    if (isNaN(balance) || balance < 0) {
+      toastMsg.textContent = "Enter valid opening balance!";
+      toastEl.classList.replace("bg-success", "bg-danger");
+      toast.show();
+      return;
+    }
+
+    // Registration success
+    toastMsg.textContent = "Registered successfully as"+username;
+    toastEl.classList.replace("bg-danger", "bg-success");
+    toast.show();
+   axios.get("https://codingshika.com/APP/EXP/add_user.php?uname="+username+"&mobile="+mobile+"&opbal="+balance)
+        .then(res => {
+          const result = res.data.posts;
+          if (result.status === "200") {
+            alert("Registration successful!");
+            window.location.href = "login.html";
+          } else {
+            alert("Registration failed. Try again.");
+          }
+        })
+
+
+    this.reset();
+  });
+</script>
+
+</body>
+</html>

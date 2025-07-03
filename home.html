@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EXPENCE MANAGER</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    function addcredit() {
+      const uid = localStorage.getItem("id");
+      let date = document.getElementById("creditdate").value;
+      let note = document.getElementById("creditnote").value;
+      let amt = document.getElementById("creditamt").value;
+
+      axios.get("https://codingshika.com/APP/EXP/insert_credit.php?uid=" + uid + "&date=" + encodeURIComponent(date) + "&note=" + encodeURIComponent(note) + "&debit=0&credit=" + amt)
+        .then(res => {
+          console.log("Insert Response:", res.data);
+          if (res.data.posts.status == 200) {
+            alert("Credit Success");
+            api(); 
+          } else {
+            alert("Credit Failed");
+          }
+        });
+    }
+
+    function adddebit() {
+      const uid = localStorage.getItem("id");
+      let date = document.getElementById("debitdate").value;
+      let note = document.getElementById("debitnote").value;
+      let amt = document.getElementById("debitamt").value;
+
+      axios.get("https://codingshika.com/APP/EXP/insert_debit.php?uid=" + uid + "&date=" + encodeURIComponent(date) + "&note=" + encodeURIComponent(note) + "&debit=" + amt + "&credit=0")
+        .then(res => {
+          console.log("Insert Response:", res.data);
+          if (res.data.posts.status == 200) {
+            alert("Debit Success");
+            api(); 
+          } else {
+            alert("Debit Failed");
+          }
+        });
+    }
+
+    function api() {
+      const uid = localStorage.getItem("id");
+      axios.post("https://codingshika.com/APP/EXP/opbal_list.php?uid="+uid)
+        .then(response => {
+          const opbal = parseFloat(response.data.posts.post[0]?.OPBAL || 0);
+          document.getElementById("currentBalance").innerText = "₹"+opbal;
+        });
+
+      axios.get("https://codingshika.com/APP/EXP/transaction_list.php?uid="+uid)
+        .then(response => {
+          const transactions = response.data.posts.post || [];
+          let crdt = 0, debt = 0, currentBalance = 0;
+          $('#transactionTable').html('');
+          transactions.forEach(tx => {
+            const credit = parseFloat(tx.CREDIT || 0);
+            const debit = parseFloat(tx.DEBIT || 0);
+            const balance = parseFloat(tx.CLBAL || 0);
+            crdt += credit;
+            debt += debit;
+            currentBalance = balance;
+            $('#transactionTable').append(
+              "<tr>" +
+        "<td>" + tx.DATE + "</td>" +
+        "<td>" + tx.NOTE + "</td>" +
+        "<td class=\"text-success\">" + credit + "</td>" +
+        "<td class=\"text-danger\">" + debit + "</td>" +
+        "<td>" + balance + "</td>" +
+        "</tr>"
+            );
+          });
+
+          document.getElementById("totalCredit").innerText = "₹" + crdt;
+    document.getElementById("totalDebit").innerText = "₹" + debt;
+    document.getElementById("creditPlusDebit").innerText = "₹" + (crdt + debt);
+    document.getElementById("creditMinusDebit").innerText = "₹" + (crdt - debt);
+    document.getElementById("Credit").innerText = crdt;
+    document.getElementById("Debit").innerText = debt;
+    document.getElementById("Balance").innerText = currentBalance;
+    document.getElementById("crdt").innerText = "₹" + crdt;
+    document.getElementById("debt").innerText = "₹" + debt;
+    document.getElementById("c+d").innerText = "₹" + (crdt + debt);
+    document.getElementById("c-d").innerText = "₹" + (crdt - debt);
+        });
+    }
+  </script>
+
+  <style>
+    .card img {
+      height: 150px;
+      object-fit: contain;
+      padding: 10px;
+    }
+    .card {
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.02);
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #212529;
+    }
+    .header-section {
+      background-color: #07a4ff;
+      color: white;
+    }
+    
+  </style>
+</head>
+<body onload="api()">
+
+  <div class="p-5 text-center header-section rounded mb-4">
+    <h1 class="mb-3">EXPENSE MANAGER</h1>
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#creditModal">Credit</button>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#debitModal">Debit</button>
+  </div>
+
+  <div class="row g-4 text-center justify-content-center">
+    <div class="col-md-3">
+      <div class="card">
+        <img src="credit.png" class="card-img-top" alt="Credit">
+        <div class="card-body">
+          <h5 class="card-title">Total Credit</h5>
+          <div id="totalCredit" class="stat-value">₹0.00</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <img src="debit.png" class="card-img-top" alt="Debit">
+        <div class="card-body">
+          <h5 class="card-title">Total Debit</h5>
+          <div id="totalDebit" class="stat-value">₹0.00</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <img src="credit+debit.png" class="card-img-top" alt="Total">
+        <div class="card-body">
+          <h5 class="card-title">Credit + Debit</h5>
+          <div id="creditPlusDebit" class="stat-value">₹0.00</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <img src="credit-debit.png" class="card-img-top" alt="Balance">
+        <div class="card-body">
+          <h5 class="card-title">Current Balance</h5>
+          <div id="currentBalance" class="stat-value">₹0.00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Credit Modal -->
+  <div class="modal fade" id="creditModal" tabindex="-1" aria-labelledby="creditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Credit Transaction</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="date" id="creditdate" class="form-control"><br>
+          <input type="text" id="creditnote" class="form-control" placeholder="Enter Note"><br>
+          <input type="number" id="creditamt" class="form-control" placeholder="Enter Amount"><br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addcredit()">Add Credit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Debit Modal -->
+  <div class="modal fade" id="debitModal" tabindex="-1" aria-labelledby="debitModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Debit Transaction</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="date" id="debitdate" class="form-control"><br>
+          <input type="text" id="debitnote" class="form-control" placeholder="Enter Note"><br>
+          <input type="number" id="debitamt" class="form-control" placeholder="Enter Amount"><br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="adddebit()">Add Debit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transactions Table -->
+  <h5 class="mt-4">Transaction List</h5>
+  <div style="max-height: 400px; overflow-y: auto;">
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Date</th>
+          <th>Note</th>
+          <th class="text-success">Credit</th>
+          <th class="text-danger">Debit</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody id="transactionTable"></tbody>
+      
+    </table>
+  </div>
+<!--privacy model-->
+    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-shield-alt text-dark me-2"></i>Privacy Policy</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Your data is securely stored and never shared with third parties. We use industry-standard encryption to protect your financial information.</p>
+          <h6>Data Collection</h6>
+          <p>We only collect necessary information to provide our services. You can delete your account anytime.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">I Understand</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+   <!-- New Footer Section -->
+  <footer class="footer mt-5 py-4 bg-light">
+    <div class="container">
+      <div class="d-flex justify-content-center gap-3">
+        <a href="contact.html" class="btn btn-outline-primary rounded-pill">
+          <i class="fas fa-envelope me-2"></i> Contact Me
+        </a>
+        <div class="d-flex justify-content-center gap-3">
+        <a href="help.html" class="btn btn-outline-primary rounded-pill">
+          <i class="fas fa-envelope me-2"></i> Help
+        </a>
+        <div class="d-flex justify-content-center gap-3">
+        <button class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#privacyModal">
+          <i class="fas fa-shield-alt me-2"></i> Privacy
+        </button>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="text-center mt-3 text-muted">
+        <small>&copy; 2023 Expense Manager. All rights reserved.</small>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

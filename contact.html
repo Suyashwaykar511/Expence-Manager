@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Suyash Waykar through various channels">
+    <title>Contact Suyash Waykar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            color: var(--secondary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .contact-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .contact-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .contact-details {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .contact-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Get In Touch</h1>
+            <p class="subtitle">Feel free to reach out through any of these channels. I typically respond within 24 hours.</p>
+        </header>
+        
+        <div class="contact-methods">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <h3 class="contact-title">Phone</h3>
+                <p class="contact-details">Available Mon-Fri, 9AM-6PM</p>
+                <a href="tel:7620962526" class="contact-btn">Call Now</a>
+            </div>
+            
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3 class="contact-title">Email</h3>
+                <p class="contact-details">For professional inquiries</p>
+                <a href="mailto:your.email@example.com" class="contact-btn">Email Me</a>
+            </div>
+            
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-comment-dots"></i>
+                </div>
+                <h3 class="contact-title">Messaging</h3>
+                <p class="contact-details">Telegram or WhatsApp</p>
+                <a href="https://t.me/Suyashwaykar5111" target="_blank" class="contact-btn">Message Me</a>
+            </div>
+        </div>
+        
+        <div class="social-links">
+            <a href="https://www.instagram.com/suyashwaykar/" target="_blank" class="social-link" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://t.me/Suyashwaykar5111" target="_blank" class="social-link" aria-label="Telegram">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/suyash-waykar-14620a1b9?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link" aria-label="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://x.com/WaykarSuyash?t=1xj6PvVVN9wUrPtJOyzV-w&s=09" class="social-link" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://github.com/Suyashwaykar511" target="_blank" target="_blank" class="social-link" aria-label="Github">
+                <i class="fab fa-github"></i></a>
+        </div>
+        
+        <footer>
+            <p>© 2025 Suyash Waykar. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
